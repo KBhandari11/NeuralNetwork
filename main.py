@@ -6,9 +6,8 @@ from scipy.optimize import minimize
 data = loadmat('ex4data1.mat')
 X = data.get('X')
 y= data.get('y')
-X =np.array(X);
-Y =np.array(y);
-m = X.shape[0]
+X =np.array(X)
+Y =np.array(y)
 
 # Set the hyperparameters
 n_x = 400    #No. of neurons in first layer
@@ -19,38 +18,47 @@ num_of_iters = 1
 data = loadmat('ex4weights.mat')
 W1 = data.get('Theta1')
 W2 = data.get('Theta2')
-W1 = np.array(W1);
-W2 = np.array(W2);
+W1 = np.array(W1)
+W2 = np.array(W2)
 parameters={
     "W1": W1,
     "W2": W2
 }
-#with lamda value 0; cost should be 0.287629
+'''
+#with lamda value 0 cost should be 0.287629
 learning_rate = 0
 num_of_iters = 1
 nN = neuralNetwork(X, Y, n_x, n_h, n_y, learning_rate)
-cost, grad = nN.model(parameters)
+cost, grad_reg = nN.model(parameters)
+
 print(cost)
+
 #using the lamda value 1 the cost should be 0.383770
 learning_rate = 1
 nN = neuralNetwork(X, Y, n_x, n_h, n_y, learning_rate)
 cost, grad = nN.model(parameters)
 print(cost)
+
 #using the lamda value 3 the cost should be 0.576051
 learning_rate = 3
 nN = neuralNetwork(X, Y, n_x, n_h, n_y, learning_rate)
 cost, grad= nN.model(parameters)
 print(cost)
 #using a random variable
+'''
 #<---------------------->
 learning_rate = 1
-num_of_iters = 100
 nN = neuralNetwork(X, Y, n_x, n_h, n_y, learning_rate)
-parameters = neuralNetwork.initialize_parameters(n_x, n_h, n_y)
-print (minimize(nN.model, parameters, options={
-    'maxiter': 100,
-    'maxfun': 500
-}))
+initialParameters = neuralNetwork.initialize_parameters(n_x, n_h, n_y)
+print(initialParameters)
+cost, grad= nN.model(initialParameters)
+parameters, cost_history= nN.gradientDescent(initialParameters, 0.8, 800)
+W1 = parameters["W1"]
+W2 = parameters["W2"]
+nN.accuracy(W1,W2)
+
+print("Done")
+
 #<------------------------>
 
 #X_test = np.array([[1], [1],[1]])
